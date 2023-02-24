@@ -1,5 +1,5 @@
 from flask import Flask
-
+from blog.models.database import db
 from blog.views.articles import articles
 from blog.views.index import index
 from blog.views.users import user
@@ -8,6 +8,9 @@ from blog.views.users import user
 def create_app() -> Flask:
     app = Flask(__name__)
     register_blueprints(app)
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///blog.db'
+    app.config['SQLALCHEMY_TRACK_MODIFICATION'] = False
+    db.init_app(app)
     return app
 
 
@@ -15,7 +18,18 @@ def register_blueprints(app: Flask):
     app.register_blueprint(user)
     app.register_blueprint(index)
     app.register_blueprint(articles)
+
+
 # app = Flask(__name__)
+#
+#
+# app.register_blueprint(user)
+# app.register_blueprint(index)
+# app.register_blueprint(articles)
+#
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///tmp/blog.db'
+# app.config['SQLALCHEMY_TRACK_MODIFICATION'] = False
+# db.init_app(app)
 #
 #
 # @app.route('/')
