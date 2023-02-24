@@ -8,9 +8,9 @@ Articles list
     <h1>Articles</h1>
     <div>
         <uk>
-            {% for title_id in articles %}
+            {% for title in articles %}
                 <li>
-                    <a href="{{ url_for('articles.detail', title_id=title_id) }}">{{ articles[title_id].name_article }}</a>
+                    <a href="{{ url_for('articles.detail', title_id=title.id) }}">{{ title.name }}</a>
                 </li>
             {% endfor %}
         </uk>

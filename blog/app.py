@@ -1,16 +1,20 @@
 from flask import Flask
 from blog.models.database import db
 from blog.views.articles import articles
+from blog.views.auth import auth, login_manager
 from blog.views.index import index
 from blog.views.users import user
 
 
 def create_app() -> Flask:
     app = Flask(__name__)
+    app.config['DEBUG'] = True
     register_blueprints(app)
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///blog.db'
     app.config['SQLALCHEMY_TRACK_MODIFICATION'] = False
     db.init_app(app)
+    app.config["SECRET_KEY"] = "abcdefg123456"
+    login_manager.init_app(app)
     return app
 
 
@@ -18,6 +22,7 @@ def register_blueprints(app: Flask):
     app.register_blueprint(user)
     app.register_blueprint(index)
     app.register_blueprint(articles)
+    app.register_blueprint(auth)
 
 
 # app = Flask(__name__)
