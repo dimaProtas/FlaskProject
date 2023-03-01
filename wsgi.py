@@ -14,6 +14,22 @@ def init_db():
     print("done!")
 
 
+@app.cli.command("add-admin")
+def add_admin():
+    """
+    Run in your terminal:
+    flask create-users
+    > done! created users: <User #1 'admin'> <User #2 'james'>
+    """
+    from blog.models import User
+    admin = User(username="adminMy", email="admin@mail.ru", is_staff=True)
+
+    db.session.add(admin)
+    db.session.commit()
+
+    print("done! add admin:", admin)
+
+
 @app.cli.command("create-users")
 def create_users():
     """
@@ -22,8 +38,8 @@ def create_users():
     > done! created users: <User #1 'admin'> <User #2 'james'>
     """
     from blog.models import User
-    admin = User(username="admin", is_staff=True)
-    james = User(username="james")
+    admin = User(username="admin", email="admin@mail.ru", is_staff=True)
+    james = User(username="james", email="james@mail.ru")
 
     db.session.add(admin)
     db.session.add(james)
@@ -49,10 +65,10 @@ def create_articles():
     db.session.add(json)
     db.session.commit()
 
-    print("done! created users:", django, flask, json)
+    print("done! created articls:", django, flask, json)
 
-# if __name__ == '__main__':
-#     app.run(
-#         host='0.0.0.0',
-#         debug=True
-#     )
+if __name__ == '__main__':
+    app.run(
+        host='0.0.0.0',
+        debug=True
+    )

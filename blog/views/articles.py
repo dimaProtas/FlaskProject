@@ -5,19 +5,6 @@ from blog.models import Articles
 
 articles = Blueprint('articles', __name__, url_prefix='/articles', static_folder='../static')
 
-# ARTICLES = {1: {'name_article': "Flask",
-#                 'author_article': {'id': 1, 'name': 'Alex'},
-#                 'text': 'Flask article text...'},
-#
-#             2: {'name_article': "Django",
-#                 'author_article': {'id': 2, 'name': 'Piter'},
-#                 'text': 'Django article text...'},
-#
-#             3: {'name_article': "JSON:API",
-#                 'author_article': {'id': 3, 'name': 'Jon'},
-#                 'text': 'JSON:API article text...'}
-#             }
-
 
 @articles.route('/', endpoint='list')
 @login_required
