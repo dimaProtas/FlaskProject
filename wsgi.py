@@ -4,16 +4,6 @@ from blog.models.database import db
 app = create_app()
 
 
-@app.cli.command("init-db")
-def init_db():
-    """
-    Run in your terminal:
-    flask init-db
-    """
-    db.create_all()
-    print("done!")
-
-
 @app.cli.command("add-admin")
 def add_admin():
     """
@@ -22,7 +12,7 @@ def add_admin():
     > done! created users: <User #1 'admin'> <User #2 'james'>
     """
     from blog.models import User
-    admin = User(username="adminMy", email="admin@mail.ru", is_staff=True)
+    admin = User(username="admin", email="admin@mail.ru", is_staff=True, password="admin")
 
     db.session.add(admin)
     db.session.commit()
@@ -30,22 +20,22 @@ def add_admin():
     print("done! add admin:", admin)
 
 
-@app.cli.command("create-users")
-def create_users():
-    """
-    Run in your terminal:
-    flask create-users
-    > done! created users: <User #1 'admin'> <User #2 'james'>
-    """
-    from blog.models import User
-    admin = User(username="admin", email="admin@mail.ru", is_staff=True)
-    james = User(username="james", email="james@mail.ru")
-
-    db.session.add(admin)
-    db.session.add(james)
-    db.session.commit()
-
-    print("done! created users:", admin, james)
+# @app.cli.command("create-users")
+# def create_users():
+#     """
+#     Run in your terminal:
+#     flask create-users
+#     > done! created users: <User #1 'admin'> <User #2 'james'>
+#     """
+#     from blog.models import User
+#     admin = User(username="Jon", email="Jon@mail.ru", is_staff=True)
+#     james = User(username="james", email="james@mail.ru")
+#
+#     db.session.add(admin)
+#     db.session.add(james)
+#     db.session.commit()
+#
+#     print("done! created users:", admin, james)
 
 
 @app.cli.command("create-articles")

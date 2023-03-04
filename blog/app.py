@@ -1,5 +1,6 @@
 from flask import Flask
 from blog.models.database import db
+from blog.security import flask_bcrypt
 from blog.views.articles import articles
 from blog.views.auth import auth, login_manager
 from blog.views.index import index
@@ -23,6 +24,7 @@ def create_app() -> Flask:
     # app.config["SECRET_KEY"] = "abcdefg123456"
     login_manager.init_app(app)
     migrate.init_app(app, db, compare_type=True)
+    flask_bcrypt.init_app(app)
     return app
 
 
