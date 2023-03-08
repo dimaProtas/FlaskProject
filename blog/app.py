@@ -1,15 +1,18 @@
 from flask import Flask
 from blog.models.database import db
 from blog.security import flask_bcrypt
-from blog.views.articles import articles
+from blog.views.articles import articles_app
 from blog.views.auth import auth, login_manager
 from blog.views.index import index
+from blog.views.authors import authors_app
 from blog.views.users import user
 import os
 from flask_migrate import Migrate
+from flask_moment import Moment
 
 
 migrate = Migrate()
+moment = Moment()
 
 def create_app() -> Flask:
     app = Flask(__name__)
@@ -23,16 +26,18 @@ def create_app() -> Flask:
     db.init_app(app)
     # app.config["SECRET_KEY"] = "abcdefg123456"
     login_manager.init_app(app)
-    migrate.init_app(app, db, compare_type=True)
+    migrate.init_app(app, db, compare_type=True, render_as_batch=True)
     flask_bcrypt.init_app(app)
+    moment.init_app(app)
     return app
 
 
 def register_blueprints(app: Flask):
     app.register_blueprint(user)
     app.register_blueprint(index)
-    app.register_blueprint(articles)
+    app.register_blueprint(articles_app)
     app.register_blueprint(auth)
+    app.register_blueprint(authors_app)
 
 
 # app = Flask(__name__)

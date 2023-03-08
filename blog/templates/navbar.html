@@ -10,7 +10,7 @@
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
                 {% for (endpoint, label) in [('user.list', 'Users'),
-                ('articles.list', 'Articles')] %}
+                ('articles.list', 'Articles'), ('authors_app.list', 'Authors')] %}
                 <a href="{{ url_for(endpoint) }}"
                    class="nav-link {% if request.endpoint == endpoint -%}active{%- endif %}"
                 >

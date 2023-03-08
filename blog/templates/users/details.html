@@ -6,6 +6,13 @@ User: {{user.id}}
 
 {% block body %}
     <h1>{{ user.username}}</h1>
+    <body>
+    {% if user.first_name %}
+        <span>Name:<b>{{ user.first_name }}</b></span>
+        <span>Las name:<b>{{ user.last_name }}</b></span>
+    {% endif %}
+        <span>email: <b>{{ user.email }}</b></span>
+    </body>
     {% if user.is_staff %}
         <span class="badge bg-secondary">staff</span>
     {% endif %}

@@ -1,21 +1,51 @@
-from flask import Blueprint, render_template
-from flask_login import login_required
+from sqlite3 import IntegrityError
+
+from flask import Blueprint, render_template, current_app, request, redirect, url_for
+from flask_login import login_required, current_user
 from werkzeug.exceptions import NotFound
-from blog.models import Articles
 
-articles = Blueprint('articles', __name__, url_prefix='/articles', static_folder='../static')
+from blog.models.database import db
+from blog.models import Author, Article
+from blog.forms.article import CreateArticleForm
+
+articles_app = Blueprint('articles', __name__, url_prefix='/articles', static_folder='../static')
 
 
-@articles.route('/', endpoint='list')
+@articles_app.route("/", endpoint="list")
+def articles_list():
+    articles = Article.query.all()
+    return render_template("articls/list.html", articles=articles)
+
+
+@articles_app.route("/<int:article_id>/", endpoint="details")
+def article_details(article_id):
+    article = Article.query.filter_by(id=article_id).one_or_none()
+    if article is None:
+        raise NotFound
+    return render_template("articls/details.html", article=article)
+
+
+@articles_app.route("/create/", methods=["GET", "POST"], endpoint="create")
 @login_required
-def article_list():
-    articles = Articles.query.all()
-    return render_template('articls/list.html', articles=articles)
+def create_article():
+    error = None
+    form = CreateArticleForm(request.form)
+    if request.method == "POST" and form.validate_on_submit():
+        article = Article(title=form.title.data.strip(), body=form.body.data)
+        db.session.add(article)
+        if current_user.author:
+            article.author = current_user.author
+        else:
+            author = Author(user_id=current_user.id)
+            db.session.add(author)
+            db.session.flush()
+            article.author_id = author.id
 
-
-@articles.route('/<int:title_id>', endpoint='detail')
-def article_detail(title_id: int):
-    articles = Articles.query.filter_by(id=title_id).one_or_none()
-    if not articles:
-        raise NotFound(f"No such article {title_id}")
-    return render_template('articls/detail.html', title=articles)
+        try:
+            db.session.commit()
+        except IntegrityError:
+            current_app.logger.exception("Could not create a new article!")
+            error = "Could not create article!"
+        else:
+            return redirect(url_for("articles.details", article_id=article.id))
+    return render_template("articls/create.html", form=form, error=error)

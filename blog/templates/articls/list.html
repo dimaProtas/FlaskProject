@@ -8,11 +8,14 @@ Articles list
     <h1>Articles</h1>
     <div>
         <uk>
-            {% for title in articles %}
+            {% for article in articles %}
                 <li>
-                    <a href="{{ url_for('articles.detail', title_id=title.id) }}">{{ title.name }}</a>
+                    <a href="{{ url_for('articles.details', article_id=article.id) }}">{{ article.title }}</a>
+                    by {{ article.author.user.username }}
                 </li>
             {% endfor %}
         </uk>
+        <hr>
+        <a href="{{ url_for('articles.create') }}">Create new</a>
     </div>
 {% endblock %}
