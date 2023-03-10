@@ -9,4 +9,4 @@ class Tag(db.Model):
     id = Column(Integer, primary_key=True)
     name = Column(String(150), nullable=False, default="", server_default="")
 
-    article = relationship("Article", back_populates="tags", secondary=article_tag_association_table)
+    articles = relationship("Article", back_populates="tags", secondary=article_tag_association_table)

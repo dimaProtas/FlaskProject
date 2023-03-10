@@ -4,6 +4,16 @@ from blog.models.database import db
 app = create_app()
 
 
+@app.cli.command("create_tags")
+def create_tags():
+    from blog.models import Tag
+    for item in ['python', 'flask', 'django', "sqlalchemy", 'news']:
+        tag = Tag(name=item)
+        db.session.add(tag)
+    db.session.commit()
+    print("done! add tags to database")
+
+
 @app.cli.command("add-admin")
 def add_admin():
     """
