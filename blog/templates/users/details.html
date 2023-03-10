@@ -8,14 +8,15 @@ User: {{user.id}}
     <h1>{{ user.username}}</h1>
     <body>
     {% if user.first_name %}
-        <span>Name:<b>{{ user.first_name }}</b></span>
-        <span>Las name:<b>{{ user.last_name }}</b></span>
+        <p>Name: <b>{{ user.first_name }}</b></p>
+        <p>Las name: <b>{{ user.last_name }}</b></p>
     {% endif %}
-        <span>email: <b>{{ user.email }}</b></span>
+        <p>email: <b>{{ user.email }}</b></p>
     </body>
     {% if user.is_staff %}
         <span class="badge bg-secondary">staff</span>
     {% endif %}
+<hr>
     <div>
         <a href="{{  url_for('user.list') }}">Back to users list</a>
     </div>
