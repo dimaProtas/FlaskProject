@@ -16,7 +16,7 @@ Articles list
                 <p class="card-text">{{ article.body[:50] }}...</p>
             </div>
             <div class="card-footer">
-                <small class="text-muted">by <a href="{{ url_for('user.details', user_id=article.author.user.id) }}">
+                <small class="text-muted">by <a href="{{ url_for('user_app.details', user_id=article.author.user.id) }}">
                     {{ article.author.user.username }}</a>, create:
                     {{ moment(article.dt_created).format('LLLL') }}
                 </small>

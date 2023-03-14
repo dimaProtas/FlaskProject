@@ -1,11 +1,13 @@
 from flask import Flask
+
+from blog.admin import admin
 from blog.models.database import db
 from blog.security import flask_bcrypt
 from blog.views.articles import articles_app
 from blog.views.auth import auth, login_manager
 from blog.views.index import index
 from blog.views.authors import authors_app
-from blog.views.users import user
+from blog.views.users import user_app
 import os
 from flask_migrate import Migrate
 from flask_moment import Moment
@@ -17,7 +19,6 @@ moment = Moment()
 def create_app() -> Flask:
     app = Flask(__name__)
     app.config['DEBUG'] = True
-    register_blueprints(app)
     # app.config.from_object('blog.configs')
     cfg_name = os.environ.get("CONFIG_NAME") or "ProductionConfig"
     app.config.from_object(f"blog.configs.{cfg_name}")
@@ -29,11 +30,13 @@ def create_app() -> Flask:
     migrate.init_app(app, db, compare_type=True, render_as_batch=True)
     flask_bcrypt.init_app(app)
     moment.init_app(app)
+    admin.init_app(app)
+    register_blueprints(app)
     return app
 
 
 def register_blueprints(app: Flask):
-    app.register_blueprint(user)
+    app.register_blueprint(user_app)
     app.register_blueprint(index)
     app.register_blueprint(articles_app)
     app.register_blueprint(auth)

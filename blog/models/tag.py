@@ -10,3 +10,6 @@ class Tag(db.Model):
     name = Column(String(150), nullable=False, default="", server_default="")
 
     articles = relationship("Article", back_populates="tags", secondary=article_tag_association_table)
+
+    def __str__(self):
+        return self.name

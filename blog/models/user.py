@@ -17,6 +17,9 @@ class User(db.Model, UserMixin):
 
     author = relationship("Author", uselist=False, back_populates="user")
 
+    def __str__(self):
+        return self.username
+
     @property
     def password(self):
         return self._password
