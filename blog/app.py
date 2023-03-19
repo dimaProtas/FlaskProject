@@ -1,6 +1,10 @@
 from flask import Flask
+from flask_combo_jsonapi import Api
 
 from blog.admin import admin
+from blog.api.article import ArticleList, ArticleDetail
+from blog.api.author import AuthorList, AuthorDetail
+from blog.api.user import UserList, UserDetail
 from blog.models.database import db
 from blog.security import flask_bcrypt
 from blog.views.articles import articles_app
@@ -15,6 +19,8 @@ from flask_moment import Moment
 
 migrate = Migrate()
 moment = Moment()
+api = Api()
+
 
 def create_app() -> Flask:
     app = Flask(__name__)
@@ -32,7 +38,27 @@ def create_app() -> Flask:
     moment.init_app(app)
     admin.init_app(app)
     register_blueprints(app)
+    register_api(app)
     return app
+
+
+def register_api(app: Flask):
+    from blog.api.tag import TagList, TagDetail
+    from blog.api import create_api_spec_plugin
+
+    api.plugins = [
+        create_api_spec_plugin(app),
+    ]
+
+    api.init_app(app)
+    api.route(TagList, "tag_list", '/api/tags/')
+    api.route(TagDetail, "tag_detail", '/api/tags/<int:id>/')
+    api.route(UserList, "user_list", "/api/users/", tag="User")
+    api.route(UserDetail, "user_detail", "/api/users/<int:id>/", tag="User")
+    api.route(AuthorList, "author_list", "/api/authors/", tag="Author")
+    api.route(AuthorDetail, "author_detail", "/api/authors/<int:id>/", tag="Author")
+    api.route(ArticleList, "article_list", "/api/articles/", tag="Article")
+    api.route(ArticleDetail, "article_detail", "/api/articles/<int:id>/", tag="Article")
 
 
 def register_blueprints(app: Flask):
