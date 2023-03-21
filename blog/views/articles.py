@@ -1,5 +1,7 @@
+from typing import Dict
 from sqlite3 import IntegrityError
 
+import requests
 from flask import Blueprint, render_template, current_app, request, redirect, url_for
 from flask_login import login_required, current_user
 from sqlalchemy.orm import joinedload
@@ -15,7 +17,8 @@ articles_app = Blueprint('articles', __name__, url_prefix='/articles', static_fo
 @articles_app.route("/", endpoint="list")
 def articles_list():
     articles = Article.query.all()
-    return render_template("articls/list.html", articles=articles)
+    count_articles: Dict = requests.get('http://127.0.0.1:5000/api/articles/event_get_count/').json()
+    return render_template("articls/list.html", articles=articles, count_articles=count_articles['count'],)
 
 
 @articles_app.route("/<int:article_id>/", endpoint="details")
