@@ -6,30 +6,30 @@ if __name__ == '__main__':
     app = create_app()
 
 
-@app.cli.command("create_tags")
-def create_tags():
-    from blog.models import Tag
-    for item in ['python', 'flask', 'django', "sqlalchemy", 'news']:
-        tag = Tag(name=item)
-        db.session.add(tag)
-    db.session.commit()
-    print("done! add tags to database")
+    @app.cli.command("create_tags")
+    def create_tags():
+        from blog.models import Tag
+        for item in ['python', 'flask', 'django', "sqlalchemy", 'news']:
+            tag = Tag(name=item)
+            db.session.add(tag)
+        db.session.commit()
+        print("done! add tags to database")
 
 
-@app.cli.command("add-admin")
-def add_admin():
-    """
-    Run in your terminal:
-    flask create-users
-    > done! created users: <User #1 'admin'> <User #2 'james'>
-    """
-    from blog.models import User
-    admin = User(username="admin", email="admin@mail.ru", is_staff=True, password="admin")
+    @app.cli.command("add-admin")
+    def add_admin():
+        """
+        Run in your terminal:
+        flask create-users
+        > done! created users: <User #1 'admin'> <User #2 'james'>
+        """
+        from blog.models import User
+        admin = User(username="admin", email="admin@mail.ru", is_staff=True, password="admin")
 
-    db.session.add(admin)
-    db.session.commit()
+        db.session.add(admin)
+        db.session.commit()
 
-    print("done! add admin:", admin)
+        print("done! add admin:", admin)
 
 
 # @app.cli.command("create-users")
