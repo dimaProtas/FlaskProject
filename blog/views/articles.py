@@ -17,7 +17,7 @@ articles_app = Blueprint('articles', __name__, url_prefix='/articles', static_fo
 @articles_app.route("/", endpoint="list")
 def articles_list():
     articles = Article.query.all()
-    count_articles: Dict = requests.get('http://127.0.0.1:5000/api/articles/event_get_count/').json()
+    count_articles: Dict = requests.get('https://flask-deploy-1qva.onrender.com/api/articles/event_get_count/').json()
     return render_template("articls/list.html", articles=articles, count_articles=count_articles['count'],)
 
 
